@@ -51,49 +51,86 @@ view: austin_bikeshare_trips {
     description: "Trip duration in minutes."
   }
 
-  # --- Measures ---
+  # --- Data Quality Measures ---
 
   measure: count {
     type: count
-    label: "Total Trips"
+    label: "Total Rows"
+    description: "Total number of row records in the raw table."
     drill_fields: [trip_id, start_station_name, end_station_name, duration_minutes]
   }
 
-  measure: average_duration {
-    type: average
-    sql: ${TABLE}.duration_minutes ;;
-    value_format_name: decimal_1
-    description: "Average trip duration in minutes."
-  }
-
-  measure: total_duration {
+  # Null / Missing Value Metrics
+  measure: null_subscriber_type_count {
     type: sum
-    sql: ${TABLE}.duration_minutes ;;
-    value_format_name: decimal_0
-    description: "Total ride duration in minutes."
+    sql: CASE WHEN ${TABLE}.subscriber_type IS NULL THEN 1 ELSE 0 END ;;
+    description: "Number of rows with missing (NULL) subscriber type."
   }
 
-  measure: subscriber_trips_count {
-    type: count
-    filters: [subscriber_type: "Local 31 Day, Local 365, Local 31 Day (FY25), Local 365 (FY25), Student Membership, Founder Member"]
-    description: "Count of trips made by members with subscriber-like profiles."
+  measure: null_subscriber_type_ratio {
+    type: number
+    sql: 1.0 * ${null_subscriber_type_count} / NULLIF(${count}, 0) ;;
+    value_format_name: percent_2
+    description: "Ratio of rows with missing subscriber type to total rows."
   }
 
-  measure: non_subscriber_trips_count {
-    type: count
-    filters: [subscriber_type: "-Local 31 Day, -Local 365, -Local 31 Day (FY25), -Local 365 (FY25), -Student Membership, -Founder Member"]
-    description: "Count of trips made by casual or single-use riders."
+  measure: null_start_station_name_count {
+    type: sum
+    sql: CASE WHEN ${TABLE}.start_station_name IS NULL THEN 1 ELSE 0 END ;;
+    description: "Number of rows with missing starting station name."
   }
 
-  measure: classic_bike_trips {
-    type: count
-    filters: [bike_type: "classic"]
-    description: "Trips made using classic (non-electric) bikes."
+  measure: null_start_station_name_ratio {
+    type: number
+    sql: 1.0 * ${null_start_station_name_count} / NULLIF(${count}, 0) ;;
+    value_format_name: percent_2
+    description: "Ratio of rows with missing starting station name."
   }
 
-  measure: electric_bike_trips {
-    type: count
-    filters: [bike_type: "electric"]
-    description: "Trips made using electric bikes."
+  measure: null_end_station_name_count {
+    type: sum
+    sql: CASE WHEN ${TABLE}.end_station_name IS NULL THEN 1 ELSE 0 END ;;
+    description: "Number of rows with missing ending station name."
+  }
+
+  measure: null_end_station_name_ratio {
+    type: number
+    sql: 1.0 * ${null_end_station_name_count} / NULLIF(${count}, 0) ;;
+    value_format_name: percent_2
+    description: "Ratio of rows with missing ending station name."
+  }
+
+  # Duration / Range Outliers
+  measure: invalid_duration_count {
+    type: sum
+    sql: CASE WHEN ${TABLE}.duration_minutes IS NULL OR ${TABLE}.duration_minutes <= 0 THEN 1 ELSE 0 END ;;
+    description: "Number of rows with duration <= 0 minutes or null."
+  }
+
+  measure: invalid_duration_ratio {
+    type: number
+    sql: 1.0 * ${invalid_duration_count} / NULLIF(${count}, 0) ;;
+    value_format_name: percent_2
+    description: "Ratio of rows with invalid durations."
+  }
+
+  measure: extreme_duration_count {
+    type: sum
+    sql: CASE WHEN ${TABLE}.duration_minutes > 1440 THEN 1 ELSE 0 END ;;
+    description: "Number of rows with duration > 24 hours (1440 minutes)."
+  }
+
+  measure: extreme_duration_ratio {
+    type: number
+    sql: 1.0 * ${extreme_duration_count} / NULLIF(${count}, 0) ;;
+    value_format_name: percent_2
+    description: "Ratio of rows with extreme durations (> 24h)."
+  }
+
+  # Uniqueness / Duplicate IDs
+  measure: duplicate_trip_ids_count {
+    type: number
+    sql: ${count} - COUNT(DISTINCT ${TABLE}.trip_id) ;;
+    description: "Number of duplicate trip ID records found in the table."
   }
 }
