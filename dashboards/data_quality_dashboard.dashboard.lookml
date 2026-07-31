@@ -116,10 +116,10 @@
       width: 24
       height: 10
 
-    # --- Tab 2: Bikeshare Analytics ---
-    - name: total_trips_kpi
+    # --- Tab 2: Bikeshare Analytics (Data Quality Anomalies) ---
+    - name: total_rows_kpi
       tab_name: bikeshare_analytics
-      title: Total Trips
+      title: Total Rows
       model: data_quality_kc
       explore: austin_bikeshare_trips
       type: single_value
@@ -127,73 +127,90 @@
       limit: 500
       row: 0
       col: 0
-      width: 8
+      width: 6
       height: 4
 
-    - name: avg_duration_kpi
+    - name: duplicate_trip_ids_kpi
       tab_name: bikeshare_analytics
-      title: Avg Duration (Min)
+      title: Duplicate Trip IDs
       model: data_quality_kc
       explore: austin_bikeshare_trips
       type: single_value
-      fields: [austin_bikeshare_trips.average_duration]
+      fields: [austin_bikeshare_trips.duplicate_trip_ids_count]
       limit: 500
       row: 0
-      col: 8
-      width: 8
+      col: 6
+      width: 6
       height: 4
 
-    - name: electric_bike_trips_kpi
+    - name: null_subscriber_ratio_kpi
       tab_name: bikeshare_analytics
-      title: Electric Bike Trips
+      title: Missing Subscriber Type %
       model: data_quality_kc
       explore: austin_bikeshare_trips
       type: single_value
-      fields: [austin_bikeshare_trips.electric_bike_trips]
+      fields: [austin_bikeshare_trips.null_subscriber_type_ratio]
       limit: 500
       row: 0
-      col: 16
-      width: 8
+      col: 12
+      width: 6
       height: 4
 
-    - name: trips_timeline
+    - name: invalid_duration_ratio_kpi
       tab_name: bikeshare_analytics
-      title: Daily Trip Volume
+      title: Invalid Durations %
+      model: data_quality_kc
+      explore: austin_bikeshare_trips
+      type: single_value
+      fields: [austin_bikeshare_trips.invalid_duration_ratio]
+      limit: 500
+      row: 0
+      col: 18
+      width: 6
+      height: 4
+
+    - name: null_subscriber_trend
+      tab_name: bikeshare_analytics
+      title: Missing Subscriber Type Trend
       model: data_quality_kc
       explore: austin_bikeshare_trips
       type: looker_line
-      fields: [austin_bikeshare_trips.start_date, austin_bikeshare_trips.count]
+      fields: [austin_bikeshare_trips.start_date, austin_bikeshare_trips.null_subscriber_type_ratio]
       sorts: [austin_bikeshare_trips.start_date desc]
       limit: 500
       row: 4
       col: 0
-      width: 24
-      height: 8
-
-    - name: popular_start_stations
-      tab_name: bikeshare_analytics
-      title: Top 10 Start Stations
-      model: data_quality_kc
-      explore: austin_bikeshare_trips
-      type: looker_bar
-      fields: [austin_bikeshare_trips.start_station_name, austin_bikeshare_trips.count]
-      sorts: [austin_bikeshare_trips.count desc]
-      limit: 10
-      row: 12
-      col: 0
       width: 12
       height: 8
 
-    - name: subscriber_vs_casual
+    - name: invalid_duration_trend
       tab_name: bikeshare_analytics
-      title: Trips by User Type
+      title: Invalid Duration Ratio Trend
       model: data_quality_kc
       explore: austin_bikeshare_trips
-      type: looker_donut
-      fields: [austin_bikeshare_trips.subscriber_type, austin_bikeshare_trips.count]
-      sorts: [austin_bikeshare_trips.count desc]
-      limit: 10
-      row: 12
+      type: looker_line
+      fields: [austin_bikeshare_trips.start_date, austin_bikeshare_trips.invalid_duration_ratio]
+      sorts: [austin_bikeshare_trips.start_date desc]
+      limit: 500
+      row: 4
       col: 12
       width: 12
+      height: 8
+
+    - name: null_stations_by_month
+      tab_name: bikeshare_analytics
+      title: Missing Station Names by Month
+      model: data_quality_kc
+      explore: austin_bikeshare_trips
+      type: looker_line
+      fields: [
+        austin_bikeshare_trips.start_month,
+        austin_bikeshare_trips.null_start_station_name_ratio,
+        austin_bikeshare_trips.null_end_station_name_ratio
+      ]
+      sorts: [austin_bikeshare_trips.start_month desc]
+      limit: 500
+      row: 12
+      col: 0
+      width: 24
       height: 8
