@@ -11,6 +11,31 @@
     - name: data_profile
       label: "Data Profile Insights"
 
+  filters:
+    - name: dq_run_date
+      title: "DQ Run Date"
+      type: field_filter
+      default_value: "7 days"
+      model: data_quality_kc
+      explore: austin_bikeshare_trips_dq_results
+      field: austin_bikeshare_trips_dq_results.job_start_date
+
+    - name: bikeshare_ride_date
+      title: "Bikeshare Ride Date"
+      type: field_filter
+      default_value: "7 days"
+      model: data_quality_kc
+      explore: austin_bikeshare_trips
+      field: austin_bikeshare_trips.start_date
+
+    - name: profile_run_date
+      title: "Profile Run Date"
+      type: field_filter
+      default_value: "7 days"
+      model: data_quality_kc
+      explore: austin_bikeshare_trips_data_profile_results
+      field: austin_bikeshare_trips_data_profile_results.job_start_date
+
   elements:
     # --- Tab 1: Data Quality Scan Results ---
     - name: total_rules_evaluated
@@ -21,6 +46,8 @@
       type: single_value
       fields: [austin_bikeshare_trips_dq_results.count]
       limit: 500
+      listen:
+        dq_run_date: austin_bikeshare_trips_dq_results.job_start_date
       row: 0
       col: 0
       width: 8
@@ -34,6 +61,8 @@
       type: single_value
       fields: [austin_bikeshare_trips_dq_results.failed_rules_count]
       limit: 500
+      listen:
+        dq_run_date: austin_bikeshare_trips_dq_results.job_start_date
       row: 0
       col: 8
       width: 8
@@ -47,6 +76,8 @@
       type: single_value
       fields: [austin_bikeshare_trips_dq_results.rule_success_rate]
       limit: 500
+      listen:
+        dq_run_date: austin_bikeshare_trips_dq_results.job_start_date
       row: 0
       col: 16
       width: 8
@@ -61,6 +92,8 @@
       fields: [austin_bikeshare_trips_dq_results.job_start_date, austin_bikeshare_trips_dq_results.rule_success_rate]
       sorts: [austin_bikeshare_trips_dq_results.job_start_date desc]
       limit: 500
+      listen:
+        dq_run_date: austin_bikeshare_trips_dq_results.job_start_date
       row: 4
       col: 0
       width: 24
@@ -75,6 +108,8 @@
       fields: [austin_bikeshare_trips_dq_results.rule_dimension, austin_bikeshare_trips_dq_results.failed_rules_count]
       sorts: [austin_bikeshare_trips_dq_results.failed_rules_count desc]
       limit: 500
+      listen:
+        dq_run_date: austin_bikeshare_trips_dq_results.job_start_date
       row: 12
       col: 0
       width: 12
@@ -89,6 +124,8 @@
       fields: [austin_bikeshare_trips_dq_results.rule_column, austin_bikeshare_trips_dq_results.failed_rules_count]
       sorts: [austin_bikeshare_trips_dq_results.failed_rules_count desc]
       limit: 500
+      listen:
+        dq_run_date: austin_bikeshare_trips_dq_results.job_start_date
       row: 12
       col: 12
       width: 12
@@ -113,6 +150,8 @@
       ]
       sorts: [austin_bikeshare_trips_dq_results.job_start_time desc]
       limit: 500
+      listen:
+        dq_run_date: austin_bikeshare_trips_dq_results.job_start_date
       row: 20
       col: 0
       width: 24
@@ -127,6 +166,8 @@
       type: single_value
       fields: [austin_bikeshare_trips.count]
       limit: 500
+      listen:
+        bikeshare_ride_date: austin_bikeshare_trips.start_date
       row: 0
       col: 0
       width: 6
@@ -140,6 +181,8 @@
       type: single_value
       fields: [austin_bikeshare_trips.duplicate_trip_ids_count]
       limit: 500
+      listen:
+        bikeshare_ride_date: austin_bikeshare_trips.start_date
       row: 0
       col: 6
       width: 6
@@ -153,6 +196,8 @@
       type: single_value
       fields: [austin_bikeshare_trips.null_subscriber_type_ratio]
       limit: 500
+      listen:
+        bikeshare_ride_date: austin_bikeshare_trips.start_date
       row: 0
       col: 12
       width: 6
@@ -166,6 +211,8 @@
       type: single_value
       fields: [austin_bikeshare_trips.invalid_duration_ratio]
       limit: 500
+      listen:
+        bikeshare_ride_date: austin_bikeshare_trips.start_date
       row: 0
       col: 18
       width: 6
@@ -180,6 +227,8 @@
       fields: [austin_bikeshare_trips.start_date, austin_bikeshare_trips.null_subscriber_type_ratio]
       sorts: [austin_bikeshare_trips.start_date desc]
       limit: 500
+      listen:
+        bikeshare_ride_date: austin_bikeshare_trips.start_date
       row: 4
       col: 0
       width: 12
@@ -194,6 +243,8 @@
       fields: [austin_bikeshare_trips.start_date, austin_bikeshare_trips.invalid_duration_ratio]
       sorts: [austin_bikeshare_trips.start_date desc]
       limit: 500
+      listen:
+        bikeshare_ride_date: austin_bikeshare_trips.start_date
       row: 4
       col: 12
       width: 12
@@ -212,6 +263,8 @@
       ]
       sorts: [austin_bikeshare_trips.start_month desc]
       limit: 500
+      listen:
+        bikeshare_ride_date: austin_bikeshare_trips.start_date
       row: 12
       col: 0
       width: 24
@@ -226,6 +279,8 @@
       type: single_value
       fields: [austin_bikeshare_trips_data_profile_results.total_rows_scanned]
       limit: 500
+      listen:
+        profile_run_date: austin_bikeshare_trips_data_profile_results.job_start_date
       row: 0
       col: 0
       width: 12
@@ -239,6 +294,8 @@
       type: single_value
       fields: [austin_bikeshare_trips_data_profile_results.count]
       limit: 500
+      listen:
+        profile_run_date: austin_bikeshare_trips_data_profile_results.job_start_date
       row: 0
       col: 12
       width: 12
@@ -256,6 +313,8 @@
       ]
       sorts: [austin_bikeshare_trips_data_profile_results.average_null_percent desc]
       limit: 500
+      listen:
+        profile_run_date: austin_bikeshare_trips_data_profile_results.job_start_date
       row: 4
       col: 0
       width: 12
@@ -273,6 +332,8 @@
       ]
       sorts: [austin_bikeshare_trips_data_profile_results.average_unique_percent desc]
       limit: 500
+      listen:
+        profile_run_date: austin_bikeshare_trips_data_profile_results.job_start_date
       row: 4
       col: 12
       width: 12
@@ -298,6 +359,8 @@
       ]
       sorts: [austin_bikeshare_trips_data_profile_results.job_start_time desc, austin_bikeshare_trips_data_profile_results.column_name asc]
       limit: 500
+      listen:
+        profile_run_date: austin_bikeshare_trips_data_profile_results.job_start_date
       row: 12
       col: 0
       width: 24
