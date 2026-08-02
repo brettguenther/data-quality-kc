@@ -15,3 +15,8 @@ explore: austin_bikeshare_trips {
   label: "Austin Bikeshare Trips Analytics"
   description: "Explore raw trip metrics and user behavior on Austin Bikeshare."
 }
+
+explore: austin_bikeshare_trips_data_profile_results {
+  label: "Austin Bikeshare Data Profile Results"
+  description: "Explore Dataplex data profile scan results for Austin Bikeshare trips."
+}
