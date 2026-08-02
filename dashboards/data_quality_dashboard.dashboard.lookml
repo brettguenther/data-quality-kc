@@ -8,6 +8,8 @@
       label: "Data Quality Scan Results"
     - name: bikeshare_analytics
       label: "Bikeshare Analytics"
+    - name: data_profile
+      label: "Data Profile Insights"
 
   elements:
     # --- Tab 1: Data Quality Scan Results ---
@@ -214,3 +216,89 @@
       col: 0
       width: 24
       height: 8
+
+    # --- Tab 3: Data Profile Insights ---
+    - name: profile_rows_scanned_kpi
+      tab_name: data_profile
+      title: Rows Profiled
+      model: data_quality_kc
+      explore: austin_bikeshare_trips_data_profile_results
+      type: single_value
+      fields: [austin_bikeshare_trips_data_profile_results.total_rows_scanned]
+      limit: 500
+      row: 0
+      col: 0
+      width: 12
+      height: 4
+
+    - name: profile_columns_count_kpi
+      tab_name: data_profile
+      title: Columns Profiled
+      model: data_quality_kc
+      explore: austin_bikeshare_trips_data_profile_results
+      type: single_value
+      fields: [austin_bikeshare_trips_data_profile_results.count]
+      limit: 500
+      row: 0
+      col: 12
+      width: 12
+      height: 4
+
+    - name: profile_nulls_by_column
+      tab_name: data_profile
+      title: Null Percentage by Column
+      model: data_quality_kc
+      explore: austin_bikeshare_trips_data_profile_results
+      type: looker_column
+      fields: [
+        austin_bikeshare_trips_data_profile_results.column_name,
+        austin_bikeshare_trips_data_profile_results.average_null_percent
+      ]
+      sorts: [austin_bikeshare_trips_data_profile_results.average_null_percent desc]
+      limit: 500
+      row: 4
+      col: 0
+      width: 12
+      height: 8
+
+    - name: profile_uniqueness_by_column
+      tab_name: data_profile
+      title: Uniqueness Percentage by Column
+      model: data_quality_kc
+      explore: austin_bikeshare_trips_data_profile_results
+      type: looker_column
+      fields: [
+        austin_bikeshare_trips_data_profile_results.column_name,
+        austin_bikeshare_trips_data_profile_results.average_unique_percent
+      ]
+      sorts: [austin_bikeshare_trips_data_profile_results.average_unique_percent desc]
+      limit: 500
+      row: 4
+      col: 12
+      width: 12
+      height: 8
+
+    - name: detailed_data_profiles_table
+      tab_name: data_profile
+      title: Detailed Column Data Profiles
+      model: data_quality_kc
+      explore: austin_bikeshare_trips_data_profile_results
+      type: looker_grid
+      fields: [
+        austin_bikeshare_trips_data_profile_results.data_profile_job_id,
+        austin_bikeshare_trips_data_profile_results.job_start_time,
+        austin_bikeshare_trips_data_profile_results.column_name,
+        austin_bikeshare_trips_data_profile_results.column_type,
+        austin_bikeshare_trips_data_profile_results.percent_null,
+        austin_bikeshare_trips_data_profile_results.percent_unique,
+        austin_bikeshare_trips_data_profile_results.min_value,
+        austin_bikeshare_trips_data_profile_results.max_value,
+        austin_bikeshare_trips_data_profile_results.average_value,
+        austin_bikeshare_trips_data_profile_results.standard_deviation
+      ]
+      sorts: [austin_bikeshare_trips_data_profile_results.job_start_time desc, austin_bikeshare_trips_data_profile_results.column_name asc]
+      limit: 500
+      row: 12
+      col: 0
+      width: 24
+      height: 10
